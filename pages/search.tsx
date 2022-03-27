@@ -1,16 +1,17 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import getPages from '../helpers/getPages';
+import removeDupes from "../helpers/removeDupes";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Search(props: { content: string }) {
+
+export default function Search(props: { data: any }) {
   const router = useRouter();
   const { q } = router.query;
   
 
-  const { data, error } = useSWR("/api/search?search=" + q, fetcher);
+  
 
 	if (!q) {
     return (
@@ -40,18 +41,9 @@ export default function Search(props: { content: string }) {
     );
   }
 
-  if (!data) {
-    return <h1 className="font-extrabold text-4xl mt-24">Awaiting Data...</h1>;
-  }
-
-  if (error) {
-    console.log(error);
-    return (
-      <h1 className="font-extrabold text-4xl mt-24">
-        An unknown error occurred.
-      </h1>
-    );
-  }
+	
+  const data = handler(props.data, q as unknown as string);
+	
 
   console.log(data);
   return (
@@ -104,4 +96,56 @@ export default function Search(props: { content: string }) {
       </div>
     </div>
   );
+}
+
+export function getStaticProps() {
+	const pages = getPages();
+	return {
+		props: {
+			data: pages
+		}
+	}
+}
+
+interface Pages {
+	slug: string;
+	data: {
+			[key: string]: any;
+	};
+}
+
+function handler(pages: Pages[], query: string): { success: boolean, data: Array<{title: string, description: string, slug: string, keywords: string[]}> } {
+  
+  
+  const searchList: string[] = (query).split("-")
+
+  //if (search.length > 20)
+
+  let r: Array<{title: string, description: string, slug: string, keywords: string[]}> = []
+	try {
+  pages.map((page) => {
+    searchList.map((search) => {
+      if (page.slug.toLowerCase().includes(search)) {
+        r.push({title: page.data.title, description: page.data.description, slug: page.slug, keywords: page.data.keywords})
+       
+        
+      }
+      else if (page.data.keywords) {
+        page.data.keywords.map((keyword: string) => {
+          if (keyword.toLowerCase().includes(search as unknown as string)) {
+            r.push({title: page.data.title, description: page.data.description, slug: page.slug, keywords: page.data.keywords})
+            
+          }
+        })
+      }
+    })
+    
+    
+  });
+} catch (e) {
+	console.log(e);
+}
+
+  return { success: (r.length != 0), data: removeDupes(r)}
+  
 }
