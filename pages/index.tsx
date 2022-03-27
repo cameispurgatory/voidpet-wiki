@@ -34,8 +34,8 @@ export default function Home(props: { pages: [key: string] }) {
         <p className="">
           Voidpet (otherwise known as the old name nightmares) is a
           Pokemon-inspired game that bases itself around emotions! Just like
-          Pokemon, Voidpets evolve into bigger creatures. It's to help make
-          people aware of others' situations and how they deal with mental
+          Pokemon, Voidpets evolve into bigger creatures. It&apos;s to help make
+          people aware of others&apos; situations and how they deal with mental
           issues and trauma.
         </p>
 
@@ -88,7 +88,7 @@ export default function Home(props: { pages: [key: string] }) {
           <hr className="w-10 mx-auto mt-1 mb-4" />
           <p className="mb-8 text-gray-700">
             Voidpet is full of mysteries and fun mechanics. While this guide
-            won't divulge the details of the secret, it will give you a wealth
+            won&apos;t divulge the details of the secret, it will give you a wealth
             of knowladge every earlygame player should know.
             <div className=" italic text-xs text-gray-600">
               to find the secret you must search for the secret

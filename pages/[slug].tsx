@@ -8,7 +8,6 @@ function Post(props: { data: any, content: any }) {
   return (
     <div>
       <h1 className="font-bold text-7xl mt-24 mb-12">{props.data.title}</h1>
-      <time className="text-gray-500 italic">{props.data.date}</time>
       <p className="prose dark:prose-invert mt-12 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-blue-500 prose-a:hover:decoration-2 prose-a:transition prose-a:cursor-pointer">
         <MDXRemote {...props.content} />
       </p>
