@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { ReactChild, useEffect, useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
+import { ReactChild, useEffect, useState, useRef } from "react";
+import { ChevronDownIcon, ChevronUpIcon, MenuAlt3Icon, XIcon } from "@heroicons/react/solid";
+import ClickOutside from "./clickOutside";
+
 
 function Header() {
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const handleScroll = () => {
     setClientWindowHeight(window.scrollY);
@@ -14,11 +17,15 @@ function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   });
 
+  if (typeof window == "undefined") {
+    return null
+  }
+  
   return (
     <>
       <div
         className={
-          "flex justify-between my-8 z-30 items-center sticky top-0 rounded-lg " +
+          "flex justify-between my-8 z-30 items-center sticky top-0 " +
           (clientWindowHeight == 0 ? "" : " bg-[#E8E9F0]/50 backdrop-blur")
         }
       >
@@ -56,8 +63,31 @@ function Header() {
             <h1 className="font-medium text-xl">Voidpet Wiki</h1>
           </a>
         </Link>
-
-        <div className="space-x-4 flex items-center">
+        {open ? <XIcon className="w-6 h-6 md:hidden " onClick={() => setOpen(false)} /> : <MenuAlt3Icon className="w-8 h-8 md:hidden " onClick={() => setOpen(true)} />}
+        {/*@ts-ignore*/}
+        <ClickOutside show={open} onClickOutside={() => setOpen(false)} className="absolute right-0 top-12">
+          <div className="rounded-lg shadow-2xl bg-white p-4 space-y-4 flex flex-col">
+          <a
+            href="https://voidpet.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg mx-auto"
+          >
+           Voidpet Tools
+          </a>
+          <Link href="/contribute">
+            <a
+              
+              
+              className="inline-block text-center rounded-lg px-3 py-1  hover:-translate-y-0.5 duration-300 text-white bg-accent shadow-md shadow-accent/25"
+            >
+              Contribute 💖
+            </a>
+          </Link>
+          </div>
+        </ClickOutside>
+        
+        <div className="space-x-4 md:flex items-center hidden peer-focus:block">
           <a
             href="https://voidpet.io"
             target="_blank"
@@ -75,12 +105,13 @@ function Header() {
               Contribute 💖
             </a>
           </Link>
+        
         </div>
       </div>
       <ul
         className={
-          "flex space-x-8 transition duration-500 mx-2 " +
-          (clientWindowHeight == 0 ? "opacity-100" : "opacity-0")
+          "flex flex-col sm:flex-row md:space-x-8 transition duration-500 mx-2 " +
+          (clientWindowHeight < 20 ? "opacity-100" : "opacity-0")
         }
       >
         <Dropdown
@@ -122,7 +153,7 @@ function Dropdown(props: {
     <li className="relative group " key={props.title}>
       <span className="pr-10 invisible">{props.title}</span>
       <button
-        className="absolute top-0 font-medium text-gray-900 focus:outline-none flex items-center z-10 bg-bg pr-10"
+        className="absolute top-0 font-medium text-gray-900 focus:outline-none flex items-center z-10 md:bg-bg pr-10"
         onClick={() => setOpen(!open)}
       >
         <span className="mr-1">{props.title}</span>
@@ -134,8 +165,8 @@ function Dropdown(props: {
           </>
         ) : null}
       </button>
-      
-        <div className=" absolute invisible group-hover:visible  group-hover:translate-y-0 -translate-y-8 transition top-0 pt-8">
+      {!open && window.innerWidth < 768 ? null : (
+        <div className=" md:absolute md:invisible md:group-hover:visible md:group-hover:translate-y-0 -translate-y-8 transition duration-100 top-0 pt-8">
           <div className="rounded-lg shadow-xl bg-gray-100  text-sm px-4 py-2 flex flex-col ">
           {props.dropdown.map((v) => 
             (
@@ -146,6 +177,7 @@ function Dropdown(props: {
           )}
           </div>
         </div>
+      )}
       
     </li>
   );

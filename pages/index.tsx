@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import PostCard from "../components/PostCard";
@@ -5,7 +6,7 @@ import getPages from "../helpers/getPages";
 
 export default function Home(props: { pages: [key: string] }) {
   return (
-    <div className="mt-16 text-gray-800 flex">
+    <div className="mt-16 text-gray-800 flex-col md:flex-row flex">
       {/*Left Side*/}
 
       <div>
@@ -30,7 +31,7 @@ export default function Home(props: { pages: [key: string] }) {
           ! No coding experiance required. Voidpet is very new and this wiki
           will probably need constant updates, so all help is appreciated.{" "}
         </p>
-        <h1 className="mt-8 font-bold text-3xl mb-2">What is Voidpet</h1>
+        <h2 className="mt-8 font-bold text-3xl mb-2">What is Voidpet</h2>
         <p className="">
           Voidpet (otherwise known as the old name nightmares) is a
           Pokemon-inspired game that bases itself around emotions! Just like
@@ -45,8 +46,39 @@ export default function Home(props: { pages: [key: string] }) {
         Please keep descriptions short and to the point.
         */}
 
-        <h1 className="mt-8 font-bold text-3xl mb-2">Featured Pages</h1>
-
+        <h2 className="mt-8 font-bold text-3xl mb-2">Featured Pages</h2>
+        <div className="grid max-w-2xl w-full sm:grid-cols-2 md:grid-cols-3 mb-8 gap-6">
+          <Featured 
+            title="Getting Started"
+            description="Learn the basics of Voidpet"
+            link="/"
+          />
+          <Featured 
+            title="Getting Started"
+            description="Learn the basics of Voidpet"
+            link="/"
+          />
+          <Featured 
+            title="Getting Started"
+            description="Learn the basics of Voidpet"
+            link="/"
+          />
+          <Featured 
+            title="Getting Started"
+            description="Learn the basics of Voidpet"
+            link="/"
+          />
+          <Featured 
+            title="Getting Started"
+            description="Learn the basics of Voidpet"
+            link="/"
+          />
+          <Featured 
+            title="Getting Started"
+            description="Learn the basics of Voidpet"
+            link="/"
+          />
+        </div>
         {/*posts.map((post) => (
         <PostCard
           key={post.slug}
@@ -60,7 +92,7 @@ export default function Home(props: { pages: [key: string] }) {
 
       {/*Right side*/}
 
-      <div className="max-w-xs w-full ml-10 space-y-10">
+      <div className="max-w-xs w-full md:ml-10 space-y-10">
         {/*First Box*/}
         <div className="rounded-lg p-4 bg-gray-50 flex flex-col shadow-lg">
           <h2 className="text-2xl text-gray-800 text-center font-semibold">
@@ -89,7 +121,7 @@ export default function Home(props: { pages: [key: string] }) {
           <p className="mb-8 text-gray-700">
             Voidpet is full of mysteries and fun mechanics. While this guide
             won&apos;t divulge the details of the secret, it will give you a wealth
-            of knowladge every earlygame player should know.
+            of knowledge every earlygame player should know.
             <div className=" italic text-xs text-gray-600">
               to find the secret you must search for the secret
             </div>
@@ -113,6 +145,19 @@ export const getStaticProps: GetStaticProps = () => {
   };
 };
 
-function Featured(props: { name: string; description: string; link: string }) {
-  return <></>;
+function Featured(props: { title: string; description: string; link: string }) {
+  return (
+    <Link href={props.link}>
+    <a className="rounded-lg bg-gray-50 shadow-md p-4 flex group cursor-pointer hover:shadow-xl transition duration-300">
+      <div className="flex-1">
+        <h3 className="font-semibold">{props.title}</h3>
+        <p className="text-sm">{props.description}</p>
+      </div>
+      <div className="pl-1">
+        <ChevronRightIcon className="h-6 w-6 text-gray-600 group-hover:text-gray-900 group-hover:translate-x-1 transition duration-300" />
+      </div>
+      
+    </a>
+    </Link>
+  );
 }
