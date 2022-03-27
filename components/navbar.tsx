@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { ReactChild, useEffect, useState, useRef } from "react";
-import { ChevronDownIcon, ChevronUpIcon, MenuAlt3Icon, XIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon, ChevronUpIcon, MenuAlt3Icon, SearchIcon, XIcon } from "@heroicons/react/solid";
 import ClickOutside from "./clickOutside";
+import { Field, Form, Formik } from "formik";
+import { useRouter } from "next/router";
 
 
 function Header() {
+  const router = useRouter();
   const [clientWindowHeight, setClientWindowHeight] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -75,6 +78,13 @@ function Header() {
           >
            Voidpet Tools
           </a>
+          <Link href="/search">
+            <a
+              className="rounded-lg mx-auto"
+            >
+              Search
+            </a>
+          </Link>
           <Link href="/contribute">
             <a
               
@@ -88,6 +98,22 @@ function Header() {
         </ClickOutside>
         
         <div className="space-x-4 md:flex items-center hidden peer-focus:block">
+          <Formik
+          initialValues={{"search": ""}}
+          onSubmit={(values) => {
+            router.push(`/search?q=${values.search}`);
+          }}
+          >
+            <Form>
+              <div className="relative">
+                 <Field name="search" type="search" className="rounded-lg text-sm border-none !py-1 shadow-md" />
+                 <button type="submit" >
+                 <SearchIcon className="absolute right-0 top-1 mr-2 w-5 h-5 text-gray-400" />
+                 </button>
+              </div>
+             
+            </Form>
+          </Formik>
           <a
             href="https://voidpet.io"
             target="_blank"
