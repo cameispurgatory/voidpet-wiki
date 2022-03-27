@@ -8,7 +8,11 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Search(props: { content: string }) {
   const router = useRouter();
   const { q } = router.query;
-  if (!q) {
+  
+
+  const { data, error } = useSWR("/api/search?search=" + q, fetcher);
+
+	if (!q) {
     return (
       <div className="">
         <h1 className="font-extrabold text-4xl mt-24 mb-4">Search anything!</h1>
@@ -36,8 +40,6 @@ export default function Search(props: { content: string }) {
     );
   }
 
-  const { data, error } = useSWR("/api/search?search=" + q, fetcher);
-
   if (!data) {
     return <h1 className="font-extrabold text-4xl mt-24">Awaiting Data...</h1>;
   }
@@ -55,7 +57,7 @@ export default function Search(props: { content: string }) {
   return (
     <div className="">
       <h1 className="font-extrabold text-4xl mt-24 mb-4">
-        Search results for "{q}"
+        Search results for &#34;{q}&#34;
       </h1>
 
       <Formik
@@ -85,10 +87,10 @@ export default function Search(props: { content: string }) {
             slug: string;
             keywords: string[];
           }) => (
-            <div className="py-6">
+            <div className="py-6" key={v.slug}>
               <h2 className="font-extrabold text-2xl mb-2">{v.title}</h2>
               {v.keywords.map((keyword) => (
-                <span className="inline-block bg-gray-300 rounded-full px-3 py-0.5 text-sm font-semibold text-gray-700 mr-2">
+                <span className="inline-block bg-gray-300 rounded-full px-3 py-0.5 text-sm font-semibold text-gray-700 mr-2" key={keyword}>
                   {keyword}
                 </span>
               ))}
