@@ -3,11 +3,83 @@ title: "Contributing"
 description: "Markdown cheatsheet for all your blogging needs - headers, lists, images, tables and more! An illustrated guide based on GitHub Flavored Markdown."
 ---
 
-Contributing is the core of what keeps this project alive. If you want to add an article, please make sure to follow the [contributing guidelines](http://localhost:3000/contribute#contributing-guidelines). Contributing requires no coding skills, if you can use the Discord message box you can help with this project. Learn how to below!
+Contributing is the core of what keeps this project alive. If you want to add an article, please make sure to follow the [contributing guidelines](#contributing-guidelines). Contributing requires no coding skills, if you can use the Discord message box you can help with this project. Learn how to below!
 
 ## How to contribute
 
-Contributing is super
+Contributing is super easy! In four easy steps, you'll be able to contribute to the Voidpet wiki. 
+
+1. [Create a GitHub account](https://github.com/signup) if you don't already have one
+
+2. Navigate to the page you want to edit on the main website. If you want to try on this article, scroll to the bottom and hit `Edit on Github`. Alternatively, if you want to create a new page, click [here](https://github.com/quick007/voidpet-wiki/tree/main/posts) and hit `add file`. 
+
+3. Click the edit button (it looks like a pen, it's on the righthand side of the file info bar that contains the lines, file size, and a few other buttons). Editing is like using a souped-up version of the Discord Editor. Learn more [here](#learning-mdx). 
+
+4. Hit `propose changes` you're ready to go 🎉 We may follow up on your pull request (what we call proposals to change the website). 
+
+## Learning MDX
+
+The MDX editor is like a souped-up Discord editor. At the top of your file, we need to add a title and description: 
+
+```
+---
+title: "Voidpet: A Beginner’s Guide!"
+description: "For people who are just getting into Voidpet!"
+---
+```
+
+Make sure you don't forget the quotes. 
+
+Next, let's add a heading and some text:
+
+```
+## Starting out
+
+Voidpet is a really fun game because:
+```
+
+Ok, that looks good, but now I want to add some bullet points. Lets do that:
+
+```
+- I loved Pokemon as a kid
+- I love ben awad
+```
+
+Notice the spacing between the `-` and the list item. 
+
+Now, I'm going to put it all together like so:
+
+```
+<p className="font-extrabold text-4xl mt-24">Voidpet: A Beginner’s Guide!</p>
+<header className="text-gray-600 text-sm mb-12 max-w-xl mt-4">For people who are just getting into Voidpet!</header>
+
+## Starting out
+
+Voidpet is a really fun game because:
+
+- I loved Pokemon as a kid
+- I love ben awad
+```
+
+### Result 
+
+---
+title: "Voidpet: A Beginner’s Guide!"
+description: "For people who are just getting into Voidpet!"
+---
+
+## Starting out
+
+Voidpet is a really fun game because:
+
+- I loved Pokemon as a kid
+- I love ben awad
+
+*I've de-emphasized the heading from an h2 to a h4 by adding more # (hashtags)*
+
+Make sure you space  things  out! Also, preview the file on github. If it doesn't look correct on GitHub, it won't look correct on the website. 
+
+You can view more styles [here](https://voidpet-wiki.vercel.app/markdown-guide)
 
 ## Contributing Guidelines
 
