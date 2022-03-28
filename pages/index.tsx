@@ -64,9 +64,9 @@ export default function Home(props: { pages: [key: string] }) {
             link="/"
           />
           <Featured 
-            title="Getting Started"
-            description="Learn the basics of Voidpet"
-            link="/"
+            title="Quests"
+            description="Learn how to complete quests"
+            link="/quests"
           />
           <Featured 
             title="Getting Started"
