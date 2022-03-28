@@ -117,14 +117,14 @@ interface Pages {
 function handler(pages: Pages[], query: string): { success: boolean, data: Array<{title: string, description: string, slug: string, keywords: string[]}> } {
   
   
-  const searchList: string[] = (query).split("-")
+  const searchList: string[] = (query).normalize().replaceAll("?", "").toLowerCase().split("-")
 
   //if (search.length > 20)
 
   let r: Array<{title: string, description: string, slug: string, keywords: string[]}> = []
 	try {
   pages.map((page) => {
-    searchList.map((search) => {
+    searchList.map((search: string) => {
       if (page.slug.toLowerCase().includes(search)) {
         r.push({title: page.data.title, description: page.data.description, slug: page.slug, keywords: page.data.keywords})
        
@@ -132,7 +132,7 @@ function handler(pages: Pages[], query: string): { success: boolean, data: Array
       }
       else if (page.data.keywords) {
         page.data.keywords.map((keyword: string) => {
-          if (keyword.toLowerCase().includes(search as unknown as string)) {
+          if (keyword.toLowerCase().includes(search)) {
             r.push({title: page.data.title, description: page.data.description, slug: page.slug, keywords: page.data.keywords})
             
           }

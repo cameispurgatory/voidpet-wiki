@@ -51,12 +51,12 @@ export default function Home(props: { pages: [key: string] }) {
           <Featured 
             title="Getting Started"
             description="Learn the basics of Voidpet"
-            link="/"
+            link="/getting-started"
           />
           <Featured 
-            title="Getting Started"
-            description="Learn the basics of Voidpet"
-            link="/"
+            title="Bond & Skills"
+            description="Learn what they are and how to boost your bond and skills/stats"
+            link="/bond-and-skills"
           />
           <Featured 
             title="Getting Started"
