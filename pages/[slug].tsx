@@ -3,8 +3,9 @@ import getPage from "../helpers/getPage";
 import getPages from "../helpers/getPages";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { H2, H3 } from "../components/elements";
+import { H2, H3, TABLE } from "../components/elements";
 import Head from "next/head";
+import remarkGfm from 'remark-gfm';
 
 function Post(props: { data: {title: string, description: string, category?: string, sidebar?: { type: 'quest', name: 'proof-of-competence', length: 'short', location: "Atrium pool & Horto Area", starterNPC: "Invidere", reward: "200xp" }}, content: any, page: any }) {
   return (
@@ -17,17 +18,19 @@ function Post(props: { data: {title: string, description: string, category?: str
         <h1 className="font-extrabold text-4xl ">{props.data.title}</h1>
         <header className="text-gray-600 text-sm mb-12 max-w-xl mt-4">{props.data.description}</header>
         <p className={"prose dark:prose-invert mt-12 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-blue-500 " +
-        "hover:prose-a:decoration-2 prose-a:transition prose-a:cursor-pointer prose-img:rounded-xl prose-img:shadow-lg"}>
+        "hover:prose-a:decoration-2 prose-a:transition prose-a:cursor-pointer prose-img:rounded-xl prose-img:shadow-lg max-w-[93vw] md:max-w-2xl"}>
           <MDXRemote
           components={{
             h2: H2,
             h3: H3,
+            table: TABLE,
           }}
+
           {...props.content} 
           />
         </p>
-        <a href={`https://github.com/quick007/voidpet-wiki/edit/main/posts/${props.page}.mdx/`} className="rounded-lg bg-gray-50 shadow-md inline-flex px-4 py-2 font-semibold text-gray-800 mt-8 hover:-translate-y-1.5 transition duration-300">Edit on Github</a>
-        <div onClick={() => alert("Coming soon:tm:")} className="rounded-lg shadow-md inline-flex px-4 py-2 ml-4 font-semibold  mt-8 bg-accent text-white hover:-translate-y-1.5 transition duration-300">Random Article</div>
+        <a href={`https://github.com/quick007/voidpet-wiki/edit/main/posts/${props.page}.mdx/`} className="rounded-lg shadow-md inline-flex px-4 py-2 font-semibold  mt-8 bg-accent text-white hover:-translate-y-1.5 transition duration-300">Edit on Github</a>
+        <div onClick={() => alert("Coming soon:tm:")} className="rounded-lg bg-gray-50 shadow-md inline-flex px-4 py-2 font-semibold text-gray-800 mt-8 hover:-translate-y-1.5 transition duration-300 ml-4 cursor-pointer">Random Article</div>
       </div>
       {props.data.sidebar ? (
         <div className="rounded-lg p-4 bg-gray-50 flex flex-col shadow-lg max-w-xs sticky top-20">
@@ -64,7 +67,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (props: { params?: any }) => {
   const page = await getPage(props.params?.slug);
-  const mdxSource = await serialize(page.content);
+  const mdxSource = await serialize(page.content, { scope: {}, mdxOptions: { remarkPlugins: [remarkGfm] } });
   return {
     props: {
       data: page.data,

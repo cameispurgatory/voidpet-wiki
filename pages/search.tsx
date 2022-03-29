@@ -1,19 +1,15 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import { Formik, Form, Field } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import getPages from '../helpers/getPages';
+import getPages from "../helpers/getPages";
 import removeDupes from "../helpers/removeDupes";
-
-
 
 export default function Search(props: { data: any }) {
   const router = useRouter();
   const { q } = router.query;
-  
 
-  
-
-	if (!q) {
+  if (!q) {
     return (
       <div className="">
         <h1 className="font-extrabold text-4xl mt-24 mb-4">Search anything!</h1>
@@ -41,9 +37,7 @@ export default function Search(props: { data: any }) {
     );
   }
 
-	
   const data = handler(props.data, q as unknown as string);
-	
 
   console.log(data);
   return (
@@ -81,15 +75,24 @@ export default function Search(props: { data: any }) {
           }) => (
             <div className="py-6" key={v.slug}>
               <h2 className="font-extrabold text-2xl mb-2">{v.title}</h2>
-              {v.keywords.map((keyword) => (
-                <span className="inline-block bg-gray-300 rounded-full px-3 py-0.5 text-sm font-semibold text-gray-700 mr-2" key={keyword}>
+              {v.keywords.slice(0, 6).map((keyword) => (
+                <span
+                  className="inline-block bg-gray-300 rounded-full px-3 py-0.5 text-sm font-semibold text-gray-700 mr-2"
+                  key={keyword}
+                >
                   {keyword}
                 </span>
               ))}
-              <p className="text-gray-600 max-w-xl mt-4 mb-6">{v.description}</p>
-              <button className="inline-block text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
-                Read 📜
-              </button>
+              <p className="text-gray-600 max-w-xl mt-4 mb-6">
+                {v.description}
+              </p>
+              <Link href={`/${v.slug}`}>
+                <a>
+                  <button className="inline-block text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
+                    Read 📜
+                  </button>
+                </a>
+              </Link>
             </div>
           )
         )}
@@ -99,53 +102,83 @@ export default function Search(props: { data: any }) {
 }
 
 export function getStaticProps() {
-	const pages = getPages();
-	return {
-		props: {
-			data: pages
-		}
-	}
+  const pages = getPages();
+  return {
+    props: {
+      data: pages,
+    },
+  };
 }
 
 interface Pages {
-	slug: string;
-	data: {
-			[key: string]: any;
-	};
+  slug: string;
+  data: {
+    [key: string]: any;
+  };
 }
 
-function handler(pages: Pages[], query: string): { success: boolean, data: Array<{title: string, description: string, slug: string, keywords: string[]}> } {
-  
-  
-  const searchList: string[] = (query).normalize().replaceAll("?", "").toLowerCase().split("-")
+function handler(
+  pages: Pages[],
+  query: string
+): {
+  success: boolean;
+  data: Array<{
+    title: string;
+    description: string;
+    slug: string;
+    keywords: string[];
+  }>;
+} {
+  pages.unshift({
+    slug: "quests",
+    data: {
+      title: "Quests",
+      description:
+        "This article will help you understand the quests in the game.",
+      keywords: ["quest", "questing", "missions"],
+    },
+  });
+  const searchList: string[] = query
+    .normalize()
+    .replaceAll("?", "")
+    .toLowerCase()
+    .split("-");
 
   //if (search.length > 20)
 
-  let r: Array<{title: string, description: string, slug: string, keywords: string[]}> = []
-	try {
-  pages.map((page) => {
-    searchList.map((search: string) => {
-      if (page.slug.toLowerCase().includes(search)) {
-        r.push({title: page.data.title, description: page.data.description, slug: page.slug, keywords: page.data.keywords})
-       
-        
-      }
-      else if (page.data.keywords) {
-        page.data.keywords.map((keyword: string) => {
-          if (keyword.toLowerCase().includes(search)) {
-            r.push({title: page.data.title, description: page.data.description, slug: page.slug, keywords: page.data.keywords})
-            
-          }
-        })
-      }
-    })
-    
-    
-  });
-} catch (e) {
-	console.log(e);
-}
+  let r: Array<{
+    title: string;
+    description: string;
+    slug: string;
+    keywords: string[];
+  }> = [];
+  try {
+    pages.map((page) => {
+      searchList.map((search: string) => {
+        if (page.slug.toLowerCase().includes(search)) {
+          r.push({
+            title: page.data.title,
+            description: page.data.description,
+            slug: page.slug,
+            keywords: page.data.keywords,
+          });
+        } else if (page.data.keywords) {
+          page.data.keywords.map((keyword: string) => {
+            if (keyword.toLowerCase().includes(search)) {
+              r.push({
+                title: page.data.title,
+                description: page.data.description,
+                slug: page.slug,
+                keywords: page.data.keywords,
+              });
+            }
+          });
+        }
+      });
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
-  return { success: (r.length != 0), data: removeDupes(r)}
-  
+  return { success: r.length != 0, data: removeDupes(r) };
 }

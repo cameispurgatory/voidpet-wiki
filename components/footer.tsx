@@ -2,7 +2,7 @@ import { ExternalLinkIcon } from "@heroicons/react/solid";
 
 function Test() {
   return (
-    <footer className="text-center my-4 text-gray-500 text-sm flex-col sm:flex-row flex mx-auto mt-12">
+    <footer className="text-center my-4 text-[#3e3d34] text-sm flex-col sm:flex-row flex mx-auto mt-12">
       Made by Lukas#1969 and all the other{" "}
       <div className="flex mx-auto sm:pl-1"><a
         className="link"
