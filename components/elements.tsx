@@ -33,14 +33,20 @@ export function H3(props: { children: any }) {
   );
 };
 
+
 export function TABLE(props: { children: any }) {
   
   return (
-    <div className="overflow-x-scroll" style={{ }}>
-      <table className=" ">
-        {props.children}
-      </table>
-    </div>
+    <>
+     
+      <div className="overflow-x-auto" >
+        <table className=" ">
+          {props.children}
+        </table>
+      </div>
+    </>
   );
 };
+
+
 

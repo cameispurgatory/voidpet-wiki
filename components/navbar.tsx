@@ -107,7 +107,7 @@ function Header() {
             <Form>
               <div className="relative">
                 <label htmlFor="search" className="sr-only">Search</label>
-                 <Field name="search" type="search" className="rounded-lg text-sm border-none !py-1 shadow-md" />
+                 <Field name="search" type="search" className="rounded-lg text-sm border-none !py-1 shadow-md !pr-7" />
                  <button type="submit" name="Search" >
                  <SearchIcon className="absolute right-0 top-1 mr-2 w-5 h-5 text-gray-400" />
                  </button>

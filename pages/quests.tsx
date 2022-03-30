@@ -1,85 +1,73 @@
-import { SearchIcon } from "@heroicons/react/solid";
-import { Formik, Form, Field } from "formik";
+import { CashIcon, LocationMarkerIcon, SearchIcon, UserIcon } from "@heroicons/react/solid";
+import { Formik, Form, Field, useFormik } from "formik";
 import { GetStaticProps } from "next";
-import { useRouter } from "next/router";
-import { isContext } from "vm";
+import Link from "next/link";
+import { useState } from "react";
 import getPages from "../helpers/getPages";
-import removeDupes from "../helpers/removeDupes";
 
 export default function Search(props: { data: any }) {
-  console.log(props.data);
-  return (
-    <div className="mt-24">
-      <h1 className="font-extrabold text-4xl ">Quests</h1>
-      <header className="text-gray-600 text-sm mb-12 max-w-xl mt-4">
-        This article will help you understand the quests in the game.
-      </header>
-      <div className="prose">
-        {props.data.map(
-          (page: {
-            slug: string;
-            data: {
-              title: string;
-              description: string;
-              slug: string;
-              keywords: string[];
-            };
-          }) => (
-            <>
-              
-                <table className="w-min">
-									<tr>
-											<th>Test</th>
-											<th>Test</th>
-											<th>Test</th>
-										</tr>
-									<tbody>
-										<tr>
-											<td>Test</td>
-											<td>Test</td>
-											<td>Test</td>
-										</tr>
-									</tbody>
+  const [data, setData] = useState(handler(props.data, ""));
+  const formik = useFormik({
+    initialValues: { filter: "" },
 
-								</table>
-								<div className="grid grid-flow-col auto-cols-max gap-8">
-									<div>
-											<h4>Test</h4>
-											<p>Contet here</p>
-									</div>
-									<div>
-											<h4>Test</h4>
-											<p>More Content here</p>
-									</div>
-									<div>
-											<h4>Test</h4>
-											<p>less</p>
-									</div>
-									<div>
-											<h4>Test</h4>
-											<p>More Content here</p>
-									</div>
-									<div>
-											<h4>Test</h4>
-											<p>More Content here</p>
-									</div>
-								</div>
-              
-            </>
-          )
-        )}
-      </div>
-      <a
-        href=""
-        className="rounded-lg shadow-md inline-flex px-4 py-2 font-semibold  mt-8 bg-accent text-white hover:-translate-y-1.5 transition duration-300"
-      >
-        See All Categories
-      </a>
-      <div
-        onClick={() => alert("Coming soon:tm:")}
-        className="rounded-lg bg-gray-50 shadow-md inline-flex px-4 py-2 font-semibold text-gray-800 mt-8 hover:-translate-y-1.5 transition duration-300 ml-4 cursor-pointer"
-      >
-        Random Article
+    onSubmit: (values) => {
+      setData(handler(props.data, values.filter));
+    },
+  });
+  return (
+    <div className="">
+      <h1 className="font-extrabold text-4xl mt-24 mb-4">Filter by Name</h1>
+
+      <form onSubmit={formik.handleSubmit}>
+        <div className="relative w-min">
+          <input
+            id="filter"
+            name="filter"
+            type="search"
+            onChange={(e) => {
+              formik.handleChange(e);
+              setData(handler(props.data, e.target.value));
+            }}
+            onBlur={formik.handleBlur}
+            value={formik.values.filter}
+            className="rounded-lg text-base border-none w-96 shadow-lg !pr-10"
+          />
+          <button type="submit">
+            <SearchIcon className="absolute right-0 top-2 mr-2 w-5 h-5 text-gray-400" />
+          </button>
+        </div>
+      </form>
+      <div className="mt-8 flex  divide-y divide-gray-900/20 flex-col">
+        {data.data.map((v) => (
+          <div className="py-6" key={v.slug}>
+            <h2 className="font-extrabold text-2xl mb-2">{v.title}</h2>
+
+            <p className="text-gray-600 max-w-xl mb-4 truncate">
+              {v.description}
+            </p>
+            <div className="flex space-x-4 mb-6">
+              <div className=" bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 flex items-center">
+                <CashIcon className="w-5 h-5 text-gray-600 mr-2" />
+                {v.sidebar.reward}
+              </div>
+              <div className=" bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 flex items-center">
+                <LocationMarkerIcon className="w-5 h-5 text-gray-600 mr-2" />
+                {v.sidebar.location}
+              </div>
+              <div className=" bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 flex items-center">
+                <UserIcon className="w-5 h-5 text-gray-600 mr-2" />
+                {v.sidebar.starterNPC}
+              </div>
+            </div>
+            <Link href={`/${v.slug}`}>
+              <a>
+                <button className="inline-block text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
+                  Explore 🌎
+                </button>
+              </a>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -87,18 +75,76 @@ export default function Search(props: { data: any }) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const pages = getPages();
-	let r: any[] = [];
-	pages.map((page) => {
-		console.log(page.data.keywords)
-		if (page.data.category) {
-			if ((page.data.category as string).includes("quest")) {
-				r.push(page);
-			}
-		}
-	})
+  let r: any[] = [];
+  pages.map((page) => {
+    if (page.data.category) {
+      if ((page.data.category as string).includes("quest")) {
+        r.push(page);
+      }
+    }
+  });
   return {
     props: {
       data: r,
     },
   };
 };
+
+interface Pages {
+  slug: string;
+  data: {
+    [key: string]: any;
+  };
+}
+
+interface MainData {
+  title: string;
+  description: string;
+  slug: string;
+  category: string;
+  sidebar: {
+    type: string;
+    name: string;
+    length: string;
+    location: string;
+    starterNPC: string;
+    reward: string;
+  };
+}
+
+function handler(
+  pages: Pages[],
+  query: string
+): {
+  success: boolean;
+  data: MainData[];
+} {
+  const searchList: string[] = query
+    .normalize()
+    .replaceAll("?", "")
+    .toLowerCase()
+    .split("-");
+
+  //if (search.length > 20)
+
+  let r: MainData[] = [];
+  try {
+    pages.map((page) => {
+      searchList.map((search: string) => {
+        if (page.slug.toLowerCase().includes(search)) {
+          r.push({
+            title: page.data.title,
+            description: page.data.description,
+            slug: page.slug,
+            category: page.data.category,
+            sidebar: page.data.sidebar,
+          });
+        }
+      });
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
+  return { success: r.length != 0, data: r };
+}
