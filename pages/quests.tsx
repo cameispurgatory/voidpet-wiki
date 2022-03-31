@@ -97,7 +97,7 @@ interface Pages {
   };
 }
 
-interface MainData {
+export interface MainData {
   title: string;
   description: string;
   slug: string;
@@ -121,7 +121,7 @@ function handler(
 } {
   const searchList: string[] = query
     .normalize()
-    .replaceAll("?", "")
+    .replace("?", "")
     .toLowerCase()
     .split("-");
 

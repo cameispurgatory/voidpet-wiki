@@ -1,5 +1,6 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import { Formik, Form, Field } from "formik";
+import { GetStaticProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import getPages from "../helpers/getPages";
@@ -101,7 +102,7 @@ export default function Search(props: { data: any }) {
   );
 }
 
-export function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const pages = getPages();
   return {
     props: {
