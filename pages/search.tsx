@@ -1,71 +1,80 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, useFormik } from "formik";
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import getPages from "../helpers/getPages";
 import removeDupes from "../helpers/removeDupes";
+
+//I love how I call the data from getStaticProps and after it's pared teh same thing (almost). Itr's super helpful!
 
 export default function Search(props: { data: any }) {
   const router = useRouter();
   const { q } = router.query;
+  
+  const [data, setData] = useState(handler(props.data, (q == undefined ? "" : q as unknown as string)));
+  const [search, setSearch] = useState(q as unknown as string)
 
-  if (!q) {
-    return (
-      <div className="">
-        <h1 className="font-extrabold text-4xl mt-24 mb-4">Search anything!</h1>
+  
+  const formik = useFormik({
+    initialValues: { filter: "" },
 
-        <Formik
-          initialValues={{ search: "" }}
-          onSubmit={(values) => {
-            router.push(`/search?q=${values.search}`);
-          }}
-        >
-          <Form>
-            <div className="relative w-min">
-              <Field
-                name="search"
-                type="search"
-                className="rounded-lg text-sm border-none w-96 shadow-lg"
-              />
-              <button type="submit">
-                <SearchIcon className="absolute right-0 top-2 mr-2 w-5 h-5 text-gray-400" />
-              </button>
-            </div>
-          </Form>
-        </Formik>
-      </div>
-    );
-  }
-
-  const data = handler(props.data, q as unknown as string);
-
-  console.log(data);
+    onSubmit: (values) => {
+      setData(handler(props.data, values.filter));
+      setSearch(values.filter)
+    },
+  });
   return (
+    <>
+    <Head>
+        <title>Search | Voidpet Wiki</title>
+        <meta name="title" content="Search | Voidpet Wiki" />
+        <meta
+          name="description"
+          content="Search anything about voidpet!"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://wiki.voidpet.io" />
+        <meta property="og:title" content="Search | Voidpet Wiki" />
+        <meta
+          property="og:description"
+          content="Search anything about voidpet!"
+        />
+        <meta property="twitter:url" content="https://wiki.voidpet.io" />
+        <meta property="twitter:title" content="Search | Voidpet Wiki" />
+        <meta
+          property="twitter:description"
+          content="Search anything about voidpet!"
+        />
+    </Head>
     <div className="">
       <h1 className="font-extrabold text-4xl mt-24 mb-4">
-        Search results for &#34;{q}&#34;
+        {search ? `Search results for "${search}"` : "Search Anything!" }
       </h1>
 
-      <Formik
-        initialValues={{ search: "" }}
-        onSubmit={(values) => {
-          router.push(`/search?q=${values.search}`);
-        }}
-      >
-        <Form>
-          <div className="relative w-min">
-            <Field
-              name="search"
-              type="search"
-              className="rounded-lg text-sm border-none w-96 shadow-lg"
-            />
-            <button type="submit">
-              <SearchIcon className="absolute right-0 top-2 mr-2 w-5 h-5 text-gray-400" />
-            </button>
-          </div>
-        </Form>
-      </Formik>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="relative w-min">
+          <input
+            id="filter"
+            name="filter"
+            type="search"
+            onChange={(e) => {
+              formik.handleChange(e);
+              setData(handler(props.data, e.target.value));
+              setSearch(e.target.value)
+            }}
+            onBlur={formik.handleBlur}
+            value={formik.values.filter}
+            className="rounded-lg text-base border-none w-96 shadow-lg !pr-10"
+          />
+          <button type="submit">
+            <SearchIcon className="absolute right-0 top-2 mr-2 w-5 h-5 text-gray-400" />
+          </button>
+        </div>
+      </form>
+      
       <div className="mt-8 flex  divide-y divide-gray-900/20 flex-col">
         {data.data.map(
           (v: {
@@ -99,6 +108,9 @@ export default function Search(props: { data: any }) {
         )}
       </div>
     </div>
+    
+    
+    </>
   );
 }
 
@@ -115,6 +127,21 @@ interface Pages {
   slug: string;
   data: {
     [key: string]: any;
+  };
+}
+
+export interface MainData {
+  title: string;
+  description: string;
+  slug: string;
+  category: string;
+  sidebar: {
+    type: string;
+    name: string;
+    length: string;
+    location: string;
+    starterNPC: string;
+    reward: string;
   };
 }
 
