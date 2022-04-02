@@ -1,4 +1,5 @@
 import {
+  BookOpenIcon,
   CashIcon,
   LocationMarkerIcon,
   SearchIcon,
@@ -83,6 +84,10 @@ export default function Search(props: { data: any }) {
                   <UserIcon className="w-5 h-5 text-gray-600 mr-2" />
                   {v.sidebar.starterNPC}
                 </div>
+                <div className=" bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 flex items-center">
+                  <BookOpenIcon className="w-5 h-5 text-gray-600 mr-2" />
+                  {v.sidebar.requirements}
+                </div>
               </div>
               <Link href={`/${v.slug}`}>
                 <a>
@@ -135,6 +140,7 @@ export interface MainData {
     location: string;
     starterNPC: string;
     reward: string;
+    requirements: string;
   };
 }
 

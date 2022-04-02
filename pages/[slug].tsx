@@ -11,14 +11,15 @@ function Post(props: {
   data: {
     title: string;
     description: string;
-    category?: string;
+    category?: "quest" | "";
     sidebar?: {
-      type: "quest";
-      name: "proof-of-competence";
-      length: "short";
-      location: "Atrium pool & Horto Area";
-      starterNPC: "Invidere";
-      reward: "200xp";
+      type: "quest" | "";
+      name: string;
+      length: string;
+      location: string;
+      starterNPC: string;
+      reward: string;
+      requirements: string
     };
   };
   content: any;
@@ -69,7 +70,7 @@ function Post(props: {
           <header className="text-gray-600 text-sm mb-12 max-w-xl mt-4">
             {props.data.description}
           </header>
-          <p
+          <article
             className={
               "prose dark:prose-invert mt-12 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-blue-500 " +
               "hover:prose-a:decoration-2 prose-a:transition prose-a:cursor-pointer prose-img:rounded-xl prose-img:shadow-lg max-w-[93vw] md:max-w-2xl"
@@ -84,7 +85,7 @@ function Post(props: {
               }}
               {...props.content}
             />
-          </p>
+          </article>
           <a
             href={`https://github.com/quick007/voidpet-wiki/edit/main/posts/${props.page}.mdx/`}
             className="rounded-lg shadow-md inline-flex px-4 py-2 font-semibold  mt-8 bg-accent text-white hover:-translate-y-1.5 transition duration-300"
@@ -130,6 +131,12 @@ function Post(props: {
                 Starter NPC:{" "}
                 <span className="font-semibold">
                   {props.data.sidebar.starterNPC}
+                </span>
+              </li>
+              <li>
+               Requirements:{" "}
+                <span className="font-semibold">
+                  {props.data.sidebar.requirements}
                 </span>
               </li>
             </ul>

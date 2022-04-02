@@ -82,8 +82,8 @@ export default function Home(props: { pages: [key: string] }) {
               link="/bond-and-skills"
             />
             <Featured
-              title="Getting Started"
-              description="Learn the basics of Voidpet"
+              title="Attacking"
+              description="Learn how to attack other Voidpets and win"
               link="/"
             />
             <Featured
@@ -92,15 +92,11 @@ export default function Home(props: { pages: [key: string] }) {
               link="/quests"
             />
             <Featured
-              title="Getting Started"
-              description="Learn the basics of Voidpet"
-              link="/"
+              title="Leveling"
+              description="Learn how to level up, wwhen your pet will evolve, and more"
+              link="/leveling"
             />
-            <Featured
-              title="Getting Started"
-              description="Learn the basics of Voidpet"
-              link="/"
-            />
+            
           </div>
           {/*posts.map((post) => (
         <PostCard
@@ -133,9 +129,13 @@ export default function Home(props: { pages: [key: string] }) {
                 wings, void matter, and boucing pets
               </li>
             </ul>
-            <button className="inline-block text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
-              Learn More 📚
-            </button>
+            <Link href="/updates">
+              <a className="w-full">
+                <button className="inline-block w-full text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
+                  Learn More 📚
+                </button>
+              </a>
+            </Link>
           </div>
           {/*Second Box*/}
           <div className="rounded-lg p-4 bg-gray-50 flex flex-col shadow-lg">
@@ -147,13 +147,14 @@ export default function Home(props: { pages: [key: string] }) {
               Voidpet is full of mysteries and fun mechanics. While this guide
               won&apos;t divulge the details of the secret, it will give you a
               wealth of knowledge every earlygame player should know.
-              <div className=" italic text-xs text-gray-600">
-                to find the secret you must search for the secret
-              </div>
             </p>
-            <button className="inline-block text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
-              Get Started 🚀
-            </button>
+            <Link href="/getting-started">
+              <a className="w-full">
+                <button className="inline-block w-full text-center rounded-lg px-5 py-2 -translate-y-1.5 hover:-translate-y-2.5 duration-300  text-white bg-accent shadow-md">
+                Get Started 🚀
+                </button>
+              </a>
+            </Link>
           </div>
         </div>
       </div>
