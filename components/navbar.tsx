@@ -20,9 +20,6 @@ function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   });
 
-  if (typeof window == "undefined") {
-    return null
-  }
   
   return (
     <>
@@ -177,10 +174,10 @@ function Dropdown(props: {
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <li className="relative group " key={props.title}>
+    <li className="relative group py-4" key={props.title}>
       <span className="pr-10 invisible">{props.title}</span>
       <button
-        className="absolute top-0 font-medium text-gray-900 focus:outline-none flex items-center z-10 md:bg-bg pr-10"
+        className="absolute top-0 font-medium text-gray-900 focus:outline-none flex items-center z-10 md:bg-bg pr-10 my-4 py-3"
         onClick={() => setOpen(!open)}
       >
         <span className="mr-1">{props.title}</span>
@@ -192,8 +189,8 @@ function Dropdown(props: {
           </>
         ) : null}
       </button>
-      {!open && window.innerWidth < 768 ? null : (
-        <div className=" md:absolute md:invisible md:group-hover:visible md:group-hover:translate-y-0 -translate-y-8 transition duration-100 top-0 pt-8">
+      {typeof window != "undefined" ? !open && window.innerWidth < 768 ? null : (
+        <div className=" md:absolute md:invisible md:group-hover:visible md:group-hover:translate-y-0 -translate-y-4 transition duration-100 top-0 pt-8">
           <div className="rounded-lg shadow-xl bg-gray-100  text-sm px-4 py-2 flex flex-col ">
           {props.dropdown.map((v) => 
             (
@@ -204,7 +201,7 @@ function Dropdown(props: {
           )}
           </div>
         </div>
-      )}
+      ) : ""}
       
     </li>
   );

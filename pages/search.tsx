@@ -168,7 +168,7 @@ function handler(
   });
   const searchList: string[] = query
     .normalize()
-    .replaceAll("?", "")
+    .replace("?", "")
     .toLowerCase()
     .split("-");
 
